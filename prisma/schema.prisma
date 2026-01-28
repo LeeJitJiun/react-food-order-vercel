@@ -1,0 +1,104 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// --- ENUMS (Business Rules) ---
+
+enum Role {
+  CUSTOMER
+  ADMIN
+}
+
+enum OrderStatus {
+  PREPARING
+  READY
+  COMPLETED
+}
+
+enum PaymentMethod {
+  CARD
+  FPX
+}
+
+// --- MODELS ---
+
+model User {
+  userId   String  @id @db.Char(5) // Format: U0001
+  username String
+  email    String  @unique
+  role     Role    @default(CUSTOMER)
+  password String
+  photo    String?
+  orders   Order[]
+}
+
+model Order {
+  orderId String      @id @db.Char(5) // Format: O0001
+  note    String?
+  status  OrderStatus @default(PREPARING)
+  total   Decimal     @db.Decimal(10, 2)
+  date    DateTime    @default(now())
+  option  String? // e.g., "Dine-in" or "Takeaway"
+
+  // Relationships
+  userId     String      @db.Char(5)
+  user       User        @relation(fields: [userId], references: [userId])
+  orderLists OrderList[]
+  payments   Payment[]
+}
+
+model OrderList {
+  orderId   String  @db.Char(5)
+  productId String  @db.Char(5)
+  quantity  Int
+  subtotal  Decimal @db.Decimal(10, 2)
+
+  // Relationships
+  order   Order   @relation(fields: [orderId], references: [orderId])
+  product Product @relation(fields: [productId], references: [productId])
+
+  @@id([orderId, productId])
+}
+
+model Product {
+  productId   String  @id @db.Char(5) // Format: P0001
+  name        String
+  price       Decimal @db.Decimal(10, 2)
+  photo       String?
+  description String?
+  isAvailable Boolean @default(true)
+  stock       Int
+
+  // Relationships
+  categoryId String      @db.Char(5)
+  category   Category    @relation(fields: [categoryId], references: [categoryId])
+  orderLists OrderList[]
+}
+
+model Category {
+  categoryId String    @id @db.Char(5) // Format: C0001
+  name       String
+  quantity   Int       @default(0)
+  isActive   Boolean   @default(true)
+  products   Product[]
+}
+
+model Payment {
+  paymentId   String        @id @db.Char(5) // Format: Y0001
+  method      PaymentMethod
+  paymentDate DateTime      @default(now())
+
+  // Relationships
+  orderId String @db.Char(5)
+  order   Order  @relation(fields: [orderId], references: [orderId])
+}

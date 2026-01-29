@@ -1,68 +1,81 @@
-import { getOrderDetails, getProducts, getCategories, getUser } from '@/app/actions/orderActions';
-import ClientApp from '@/components/ClientApp';
-import { redirect } from 'next/navigation';
+import {
+  getOrderDetails,
+  getProducts,
+  getCategories,
+  getUser,
+} from "@/app/actions/orderActions";
+import ClientApp from "@/components/ClientApp";
+import { redirect } from "next/navigation";
+import { getAuthenticatedUserId } from "@/lib/auth";
 
 interface PageProps {
-    searchParams: Promise<{
-        id?: string;
-    }>;
+  searchParams: Promise<{
+    id?: string;
+  }>;
 }
 
 export default async function OrderDetailsPage({ searchParams }: PageProps) {
-    const params = await searchParams;
-    const orderId = params.id;
+  const params = await searchParams;
+  const orderId = params.id;
 
-    if (!orderId) {
-        redirect('/history');
-    }
+  if (!orderId) {
+    redirect("/history");
+  }
 
-    // Fetch all necessary data
-    const [rawProducts, categories] = await Promise.all([
-        getProducts(),
-        getCategories(),
-    ]);
+  // Get authenticated user ID
+  const userId = await getAuthenticatedUserId();
 
-    // Get user
-    const user = await getUser('U0001');
+  if (!userId) {
+    redirect("/login");
+  }
 
-    if (!user) {
-        throw new Error('User not found');
-    }
+  // Fetch all necessary data
+  const [rawProducts, categories] = await Promise.all([
+    getProducts(),
+    getCategories(),
+  ]);
 
-    // Get order details
-    const orderDetails = await getOrderDetails(orderId);
+  // Get user
+  const user = await getUser(userId);
 
-    if (!orderDetails) {
-        redirect('/history');
-    }
+  if (!user) {
+    throw new Error("User not found");
+  }
 
-    // Convert Prisma Decimal to number for client components
-    const products = rawProducts.map(p => ({
-        ...p,
-        price: Number(p.price)
-    }));
+  // Get order details
+  const orderDetails = await getOrderDetails(orderId);
 
-    const order = {
-        ...orderDetails,
-        total: Number(orderDetails.total),
-        orderLists: orderDetails.orderLists.map(item => ({
-            ...item,
-            subtotal: Number(item.subtotal),
-            product: {
-                ...item.product,
-                price: Number(item.product.price)
-            }
-        }))
-    };
+  if (!orderDetails) {
+    redirect("/history");
+  }
 
-    return (
-        <ClientApp
-            products={products}
-            categories={categories}
-            orders={[order]}
-            user={user}
-            initialView="orderDetails"
-            selectedOrderId={orderId}
-        />
-    );
+  // Convert Prisma Decimal to number for client components
+  const products = rawProducts.map((p) => ({
+    ...p,
+    price: Number(p.price),
+  }));
+
+  const order = {
+    ...orderDetails,
+    total: Number(orderDetails.total),
+    orderLists: orderDetails.orderLists.map((item) => ({
+      ...item,
+      subtotal: Number(item.subtotal),
+      product: {
+        ...item.product,
+        price: Number(item.product.price),
+      },
+    })),
+  };
+
+  return (
+    <ClientApp
+      products={products}
+      categories={categories}
+      orders={[order]}
+      user={user}
+      initialView="orderDetails"
+      selectedOrderId={orderId}
+    />
+  );
 }

@@ -1,6 +1,4 @@
 import {
-  getProducts,
-  getCategories,
   getUserOrders,
   getUser,
 } from "../actions/orderActions";
@@ -16,13 +14,7 @@ export default async function HistoryPage() {
     redirect("/auth-required");
   }
 
-  // Fetch all necessary data
-  const [rawProducts, categories] = await Promise.all([
-    getProducts(),
-    getCategories(),
-  ]);
-
-  // Get user and their orders
+  // Get user and their orders only (no need for all products and categories)
   const user = await getUser(userId);
 
   if (!user) {
@@ -32,11 +24,6 @@ export default async function HistoryPage() {
   const rawOrders = await getUserOrders(user.userId);
 
   // Convert Prisma Decimal to number for client components
-  const products = rawProducts.map((p) => ({
-    ...p,
-    price: Number(p.price),
-  }));
-
   const orders = rawOrders.map((order) => ({
     ...order,
     total: Number(order.total),
@@ -56,8 +43,8 @@ export default async function HistoryPage() {
 
   return (
     <ClientApp
-      products={products}
-      categories={categories}
+      products={[]}
+      categories={[]}
       orders={orders}
       user={user}
       initialView="history"

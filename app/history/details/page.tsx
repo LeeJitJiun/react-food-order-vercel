@@ -1,7 +1,5 @@
 import {
   getOrderDetails,
-  getProducts,
-  getCategories,
   getUser,
 } from "@/app/actions/orderActions";
 import ClientApp from "@/components/ClientApp";
@@ -26,16 +24,10 @@ export default async function OrderDetailsPage({ searchParams }: PageProps) {
   const userId = await getAuthenticatedUserId();
 
   if (!userId) {
-    redirect("/login");
+    redirect("/auth-required");
   }
 
-  // Fetch all necessary data
-  const [rawProducts, categories] = await Promise.all([
-    getProducts(),
-    getCategories(),
-  ]);
-
-  // Get user
+  // Get user and order details only (no need for all products and categories)
   const user = await getUser(userId);
 
   if (!user) {
@@ -50,11 +42,6 @@ export default async function OrderDetailsPage({ searchParams }: PageProps) {
   }
 
   // Convert Prisma Decimal to number for client components
-  const products = rawProducts.map((p) => ({
-    ...p,
-    price: Number(p.price),
-  }));
-
   const order = {
     ...orderDetails,
     total: Number(orderDetails.total),
@@ -70,8 +57,8 @@ export default async function OrderDetailsPage({ searchParams }: PageProps) {
 
   return (
     <ClientApp
-      products={products}
-      categories={categories}
+      products={[]}
+      categories={[]}
       orders={[order]}
       user={user}
       initialView="orderDetails"

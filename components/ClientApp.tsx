@@ -432,7 +432,7 @@ export default function ClientApp({
       </main>
 
       {/* --- Edit Profile Modal --- */}
-      {isEditingProfile && (
+      {isEditingProfile && currentUser && (
         <EditProfileView
           user={currentUser}
           onClose={() => setIsEditingProfile(false)}

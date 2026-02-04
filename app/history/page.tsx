@@ -13,7 +13,7 @@ export default async function HistoryPage() {
   const userId = await getAuthenticatedUserId();
 
   if (!userId) {
-    redirect("/login");
+    redirect("/auth-required");
   }
 
   // Fetch all necessary data

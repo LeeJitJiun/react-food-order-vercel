@@ -403,71 +403,71 @@ export default function ClientApp({
       {/* --- Main Viewport --- */}
       <main className="min-h-screen md:ml-20 lg:ml-28 px-4 sm:px-6 lg:px-10 py-6 lg:py-10 pb-24 md:pb-10">
         <div className="max-w-7xl mx-auto w-full">
-        {/* Persistent Branding */}
-        <div className="flex justify-between items-center mb-6 lg:mb-10">
-          <button
-            onClick={() => router.push("/")}
-            className="flex items-center gap-2 lg:gap-3 group"
-          >
-            <div className="w-8 h-8 lg:w-10 lg:h-10 bg-[#3e3a36] dark:bg-white text-white dark:text-[#3e3a36] rounded-xl flex items-center justify-center group-hover:rotate-45 transition-transform">
-              <Sparkles size={16} className="lg:w-[18px] lg:h-[18px]" />
-            </div>
-            <span className="text-lg lg:text-xl font-black italic tracking-tighter dark:text-white">
-              Oasis
-            </span>
-          </button>
-
-          {(view === "shop" ||
-            view === "history" ||
-            view === "profile" ||
-            view === "orderDetails") && (
+          {/* Persistent Branding */}
+          <div className="flex justify-between items-center mb-6 lg:mb-10">
             <button
-              onClick={() =>
-                router.push(view === "orderDetails" ? "/history" : "/")
-              }
-              className="flex items-center gap-2 text-sm font-bold text-gray-400 hover:text-[#3e3a36] dark:hover:text-white transition-colors"
+              onClick={() => router.push("/")}
+              className="flex items-center gap-2 lg:gap-3 group"
             >
-              <ArrowLeft size={16} /> Back to{" "}
-              {view === "orderDetails" ? "History" : "Sanctuary"}
+              <div className="w-8 h-8 lg:w-10 lg:h-10 bg-[#3e3a36] dark:bg-white text-white dark:text-[#3e3a36] rounded-xl flex items-center justify-center group-hover:rotate-45 transition-transform">
+                <Sparkles size={16} className="lg:w-[18px] lg:h-[18px]" />
+              </div>
+              <span className="text-lg lg:text-xl font-black italic tracking-tighter dark:text-white">
+                Oasis
+              </span>
             </button>
-          )}
-        </div>
 
-        {view === "home" ? (
-          <HomeView
-            featuredProducts={featuredProducts}
-            onNavigateToShop={() => router.push("/menu")}
-            darkMode={darkMode}
-            isGuest={!currentUser}
-          />
-        ) : view === "shop" ? (
-          <ShopView
-            products={products}
-            categories={categories}
-            onAddToCart={addToCart}
-            darkMode={darkMode}
-          />
-        ) : view === "history" ? (
-          <HistoryView
-            orders={clientOrders}
-            onNavigateToShop={() => router.push("/menu")}
-            onViewOrderDetails={handleViewOrderDetails}
-          />
-        ) : view === "orderDetails" ? (
-          <OrderDetailsView
-            order={selectedOrder}
-            onBack={() => router.push("/history")}
-          />
-        ) : view === "profile" ? (
-          <ProfileView
-            user={currentUser}
-            ordersCount={clientOrders.length}
-            onLogout={handleLogout}
-            onEditProfile={() => setIsEditingProfile(true)}
-          />
-        ) : (
-          <LoginView />
-        )}
+            {(view === "shop" ||
+              view === "history" ||
+              view === "profile" ||
+              view === "orderDetails") && (
+              <button
+                onClick={() =>
+                  router.push(view === "orderDetails" ? "/history" : "/")
+                }
+                className="flex items-center gap-2 text-sm font-bold text-gray-400 hover:text-[#3e3a36] dark:hover:text-white transition-colors"
+              >
+                <ArrowLeft size={16} /> Back to{" "}
+                {view === "orderDetails" ? "History" : "Sanctuary"}
+              </button>
+            )}
+          </div>
+
+          {view === "home" ? (
+            <HomeView
+              featuredProducts={featuredProducts}
+              onNavigateToShop={() => router.push("/menu")}
+              darkMode={darkMode}
+              isGuest={!currentUser}
+            />
+          ) : view === "shop" ? (
+            <ShopView
+              products={products}
+              categories={categories}
+              onAddToCart={addToCart}
+              darkMode={darkMode}
+            />
+          ) : view === "history" ? (
+            <HistoryView
+              orders={clientOrders}
+              onNavigateToShop={() => router.push("/menu")}
+              onViewOrderDetails={handleViewOrderDetails}
+            />
+          ) : view === "orderDetails" ? (
+            <OrderDetailsView
+              order={selectedOrder}
+              onBack={() => router.push("/history")}
+            />
+          ) : view === "profile" ? (
+            <ProfileView
+              user={currentUser}
+              ordersCount={clientOrders.length}
+              onLogout={handleLogout}
+              onEditProfile={() => setIsEditingProfile(true)}
+            />
+          ) : (
+            <LoginView />
+          )}
         </div>
       </main>
 

@@ -1,7 +1,4 @@
-import {
-  getOrderDetails,
-  getUser,
-} from "@/app/actions/orderActions";
+import { getOrderDetails, getUser } from "@/app/actions/orderActions";
 import ClientApp from "@/components/ClientApp";
 import { redirect } from "next/navigation";
 import { getAuthenticatedUserId } from "@/lib/auth";

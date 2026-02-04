@@ -323,9 +323,9 @@ export default function ClientApp({
   }
 
   return (
-    <div className="min-h-screen bg-[#f9f7f2] dark:bg-[#1a1816] text-[#3e3a36] dark:text-white/90 font-serif selection:bg-[#d4c8b8] flex transition-colors duration-500">
-      {/* --- Float Navigation --- */}
-      <nav className="fixed left-6 top-1/2 -translate-y-1/2 z-40 bg-white/80 dark:bg-[#2d2a27]/80 backdrop-blur-xl border border-white dark:border-white/5 p-3 rounded-full shadow-2xl flex flex-col gap-4">
+    <div className="min-h-screen bg-[#f9f7f2] dark:bg-[#1a1816] text-[#3e3a36] dark:text-white/90 font-serif selection:bg-[#d4c8b8] transition-colors duration-500">
+      {/* --- Float Navigation (Desktop) --- */}
+      <nav className="hidden md:flex fixed left-4 lg:left-6 top-1/2 -translate-y-1/2 z-40 bg-white/80 dark:bg-[#2d2a27]/80 backdrop-blur-xl border border-white dark:border-white/5 p-2 lg:p-3 rounded-full shadow-2xl flex-col gap-3 lg:gap-4">
         <NavButton
           icon={Leaf}
           active={view === "home" || view === "shop"}
@@ -362,18 +362,57 @@ export default function ClientApp({
         </button>
       </nav>
 
+      {/* --- Mobile Bottom Navigation --- */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-[#2d2a27]/95 backdrop-blur-xl border-t border-gray-200 dark:border-white/5 px-4 py-3 shadow-2xl">
+        <div className="flex justify-around items-center max-w-lg mx-auto">
+          <NavButton
+            icon={Leaf}
+            active={view === "home" || view === "shop"}
+            onClick={() => router.push("/")}
+          />
+          <NavButton
+            icon={History}
+            active={view === "history" || view === "orderDetails"}
+            onClick={() => router.push("/history")}
+          />
+          <button
+            onClick={() => setIsCheckoutOpen(true)}
+            className="w-14 h-14 rounded-full bg-[#3e3a36] dark:bg-white text-white dark:text-[#3e3a36] flex items-center justify-center relative hover:scale-110 transition-transform -mt-8 shadow-xl"
+          >
+            <ShoppingBasket size={22} />
+            {cart.length > 0 && (
+              <span className="absolute -top-1 -right-1 w-5 h-5 bg-[#c8a47e] rounded-full text-[10px] font-bold flex items-center justify-center border-2 border-white dark:border-[#2d2a27]">
+                {cart.reduce((a, b) => a + b.quantity, 0)}
+              </span>
+            )}
+          </button>
+          <NavButton
+            icon={User}
+            active={view === "profile"}
+            onClick={() => router.push("/profile")}
+          />
+          <button
+            onClick={() => setDarkMode(!darkMode)}
+            className="w-12 h-12 rounded-full flex items-center justify-center text-gray-400 hover:text-[#c8a47e] transition-colors"
+          >
+            {darkMode ? <Sun size={20} /> : <Moon size={20} />}
+          </button>
+        </div>
+      </nav>
+
       {/* --- Main Viewport --- */}
-      <main className="flex-1 ml-28 p-10 max-w-7xl mx-auto">
+      <main className="min-h-screen md:ml-20 lg:ml-28 px-4 sm:px-6 lg:px-10 py-6 lg:py-10 pb-24 md:pb-10">
+        <div className="max-w-7xl mx-auto w-full">
         {/* Persistent Branding */}
-        <div className="flex justify-between items-center mb-10">
+        <div className="flex justify-between items-center mb-6 lg:mb-10">
           <button
             onClick={() => router.push("/")}
-            className="flex items-center gap-3 group"
+            className="flex items-center gap-2 lg:gap-3 group"
           >
-            <div className="w-10 h-10 bg-[#3e3a36] dark:bg-white text-white dark:text-[#3e3a36] rounded-xl flex items-center justify-center group-hover:rotate-45 transition-transform">
-              <Sparkles size={18} />
+            <div className="w-8 h-8 lg:w-10 lg:h-10 bg-[#3e3a36] dark:bg-white text-white dark:text-[#3e3a36] rounded-xl flex items-center justify-center group-hover:rotate-45 transition-transform">
+              <Sparkles size={16} className="lg:w-[18px] lg:h-[18px]" />
             </div>
-            <span className="text-xl font-black italic tracking-tighter dark:text-white">
+            <span className="text-lg lg:text-xl font-black italic tracking-tighter dark:text-white">
               Oasis
             </span>
           </button>
@@ -429,6 +468,7 @@ export default function ClientApp({
         ) : (
           <LoginView />
         )}
+        </div>
       </main>
 
       {/* --- Edit Profile Modal --- */}

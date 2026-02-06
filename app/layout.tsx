@@ -11,11 +11,11 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   title: "Oasis - Botanical Food Ordering",
   description:
-    "Experience slow-crafted botanical delicacies harvested from our vertical glasshouse gardens.",
+    "Experience well-cooked botanical DELICACIES harvested fresh from our vertical glasshouse gardens.",
   openGraph: {
     title: "Oasis - Botanical Food Ordering",
     description:
-      "Experience slow-crafted botanical delicacies harvested from our vertical glasshouse gardens.",
+      "Experience well-cooked botanical DELICACIES harvested fresh from our vertical glasshouse gardens.",
     url: "https://foodordering.quadrawebs.com",
     siteName: "Oasis",
     images: [
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Oasis - Botanical Food Ordering",
     description:
-      "Experience slow-crafted botanical delicacies harvested from our vertical glasshouse gardens.",
+      "Experience well-cooked botanical DELICACIES harvested fresh from our vertical glasshouse gardens.",
     images: ["/og-image.png"],
   },
 };

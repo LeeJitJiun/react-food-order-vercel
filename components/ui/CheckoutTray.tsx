@@ -35,7 +35,7 @@ export function CheckoutTray({
   return (
     <div className={`fixed inset-0 z-50 flex justify-end transition-all duration-700 ${isOpen ? 'visible' : 'invisible'}`}>
       <div
-        className={`absolute inset-0 bg-[#3e3a36]/20 dark:bg-black/60 backdrop-blur-sm transition-opacity duration-700 ${isOpen ? 'opacity-100' : 'opacity-0'}`}
+        className={`absolute inset-0 bg-[#3e3a36]/20 dark:bg-black/60 backdrop-blur-[2px] transition-opacity duration-700 ${isOpen ? 'opacity-100' : 'opacity-0'}`}
         onClick={onClose}
       />
 
